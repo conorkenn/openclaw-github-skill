@@ -24,35 +24,37 @@ A skill that lets your AI assistant query and manage GitHub repositories.
 1. Go to https://github.com/settings/tokens
 2. Click "Generate new token (classic)"
 3. Name: `openclaw-github-skill`
-4. Scopes (permissions): `repo`, `read:user`
+4. Scopes (permissions):
+   - `repo` — Full control of private repositories
+   - `public_repo` — Limited access to public repositories only
+   - `read:user` — Read user profile data (optional)
 5. Copy the token
 
-### 2. Configure Environment Variables
+### 2. Configure Credentials
 
-Add to your shell profile (`~/.zshrc` or `~/.bashrc`):
+**Option A: Environment Variables (Recommended for local use)**
+
+Set before starting OpenClaw:
 
 ```bash
-# GitHub Token for OpenClaw Skills
 export GITHUB_TOKEN="ghp_your_token_here"
 export GITHUB_USERNAME="your_github_username"
 ```
 
-Then run:
-```bash
-source ~/.zshrc
+**Option B: OpenClaw Config**
+
+Add to `~/.openclaw/openclaw.json`:
+
+```json
+{
+  "github": {
+    "token": "ghp_your_token_here",
+    "username": "your_username"
+  }
+}
 ```
 
-### 3. Install the Skill
-
-Copy to your OpenClaw skills directory:
-
-```bash
-git clone https://github.com/YOUR_USERNAME/openclaw-github-skill.git ~/.openclaw/skills/github-skill
-```
-
-Or download and extract manually.
-
-### 4. Restart OpenClaw
+### 3. Restart OpenClaw
 
 ```bash
 openclaw gateway restart
@@ -93,42 +95,42 @@ openclaw-github-skill/
 |---------|-------------|
 | `list_repos` | List repositories (filter by type, language, sort) |
 | `get_repo` | Get detailed repo info (stars, forks, etc.) |
-| `check_ci_status` | Check CI/CD pipeline status |
+| `check_ci_status` | CI/CD status |
 | `create_issue` | Create a new issue |
 | `search_repos` | Search your repositories |
 | `get_recent_activity` | View recent commits |
 
 ## Security
 
-⚠️ **IMPORTANT: Never commit your GitHub token to version control!**
+⚠️ **IMPORTANT: Protect Your GitHub Token!**
 
-This skill uses **environment variables** for authentication:
-
-- `GITHUB_TOKEN` — Your personal access token
-- `GITHUB_USERNAME` — Your GitHub username
-
-**Never:**
-- ❌ Commit tokens to git
-- ❌ Share tokens in code or config files
-- ❌ Add tokens to the README or examples
-
-**Always:**
-- ✅ Use environment variables
+**Do:**
+- ✅ Use environment variables or OpenClaw config
+- ✅ Use minimal required scopes (`repo` or `public_repo`)
 - ✅ Rotate tokens if compromised
-- ✅ Use minimal required scopes (`repo`, `read:user`)
+
+**Don't:**
+- ❌ Commit tokens to git
+- ❌ Share tokens in code or public repos
+- ❌ Store tokens in unprotected files
+
+**Best Practices:**
+- For local development: Environment variables are acceptable
+- For shared machines: Use OpenClaw config or a secrets manager
+- For production: Use your platform's credential store
 
 ## Rate Limits
 
 - **Unauthenticated requests:** 60/hour
 - **Authenticated requests:** 5,000/hour
 
-The skill automatically uses your token for authentication.
+The skill automatically uses your credentials for authentication.
 
 ## Requirements
 
 - OpenClaw 2024+
 - Node.js 18+
-- GitHub Personal Access Token with `repo` and `read:user` scopes
+- GitHub Personal Access Token with appropriate scopes
 
 ## Contributing
 

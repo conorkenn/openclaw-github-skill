@@ -7,16 +7,21 @@ const GITHUB_API = 'https://api.github.com';
 let cachedUser = null;
 
 /**
- * Get GitHub username from config or API
+ * Get GitHub username from environment, config, or API
  */
 async function getUsername(context) {
-  const config = context.config?.github || {};
+  // 1. Check environment variable first
+  if (process.env.GITHUB_USERNAME) {
+    return process.env.GITHUB_USERNAME;
+  }
   
+  // 2. Check OpenClaw config
+  const config = context.config?.github || {};
   if (config.username) {
     return config.username;
   }
   
-  // Fetch from API if not configured
+  // 3. Fetch from API if not configured
   if (!cachedUser) {
     const response = await fetch(`${GITHUB_API}/user`, {
       headers: authHeaders(context)
@@ -29,15 +34,22 @@ async function getUsername(context) {
 }
 
 /**
- * Get auth headers
+ * Get auth headers - checks environment first, then config
  */
 function authHeaders(context) {
-  const config = context.config?.github || {};
   const headers = {
     'Accept': 'application/vnd.github.v3+json',
     'User-Agent': 'OpenClaw-GitHub-Skill'
   };
   
+  // 1. Check environment variable first
+  if (process.env.GITHUB_TOKEN) {
+    headers['Authorization'] = `token ${process.env.GITHUB_TOKEN}`;
+    return headers;
+  }
+  
+  // 2. Fall back to OpenClaw config
+  const config = context.config?.github || {};
   if (config.token) {
     headers['Authorization'] = `token ${config.token}`;
   }

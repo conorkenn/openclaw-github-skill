@@ -1,3 +1,9 @@
+---
+name: github
+description: Query and manage GitHub repositories - list repos, check CI status, create issues, search repos, and view recent activity.
+metadata: { "openclaw": { "emoji": "🐙" } }
+---
+
 # GitHub Integration Skill
 
 Query and manage GitHub repositories directly from your AI assistant.
@@ -8,11 +14,10 @@ Query and manage GitHub repositories directly from your AI assistant.
 |------------|-------------|
 | `list_repos` | List your repositories with filters |
 | `get_repo` | Get detailed info about a specific repo |
-| `get_repo_status` | Check stars, forks, last updated |
 | `check_ci_status` | Check CI/CD pipeline status |
 | `create_issue` | Create a new issue in a repo |
 | `search_repos` | Search your repositories |
-| `get_recent_activity` | Get recent commits, PRs, issues |
+| `get_recent_activity` | Get recent commits |
 
 ## Usage
 
@@ -27,48 +32,67 @@ You: Create an issue about the bug
 Bot: [creates the issue]
 ```
 
-## Configuration
+## Setup
 
-### Required
-
-```yaml
-github:
-  token: "your-github-token"  # Personal access token
-  username: "your-username"   # Your GitHub username
-```
-
-### Getting a Token
+### 1. Generate GitHub Personal Access Token
 
 1. Go to https://github.com/settings/tokens
-2. Generate new token (classic)
-3. Select scopes: `repo`, `read:user`
-4. Copy and configure
+2. Click "Generate new token (classic)"
+3. Name: `openclaw-github-skill`
+4. Scopes: `repo` (required), `read:user` (optional)
+5. Copy the token
 
-## Example Commands
+### 2. Configure Credentials
 
-### List All Repos
-```yaml
-action: list_repos
-sort: updated
-limit: 10
+**Option A: Environment Variables (Recommended)**
+
+Set environment variables before starting OpenClaw:
+
+```bash
+export GITHUB_TOKEN="ghp_your_token_here"
+export GITHUB_USERNAME="your_github_username"
 ```
 
-### Get Specific Repo
-```yaml
-action: get_repo
-owner: "conorkennedy"
-repo: "my-project"
+**Option B: OpenClaw Config**
+
+Add to `~/.openclaw/openclaw.json`:
+
+```json
+{
+  "github": {
+    "token": "ghp_your_token_here",
+    "username": "your_username"
+  }
+}
 ```
 
-### Check CI Status
-```yaml
-action: check_ci_status
-owner: "conorkennedy"
-repo: "my-project"
+### 3. Restart OpenClaw
+
+```bash
+openclaw gateway restart
 ```
 
-## Notes
+## Security Notes
 
-- Rate limits apply (60/hr for unauthenticated, 5,000/hr for authenticated)
-- Uses GitHub REST API
-- Supports both public and private repos
+⚠️ **Protect Your Token:**
+
+- Never commit your token to git or share it publicly
+- Use the minimal required scopes (`repo` for private repos, `public_repo` for public-only)
+- Rotate your token if you suspect it was compromised
+- Consider using a secrets manager for production use
+
+⚠️ **Best Practices:**
+
+- Don't store tokens in shell profiles (~/.zshrc) on shared machines
+- For local development, environment variables are acceptable
+- For production, use your platform's secret/credential store
+
+## Rate Limits
+
+- Unauthenticated requests: 60/hour
+- Authenticated requests: 5,000/hour
+
+## Requirements
+
+- OpenClaw gateway running
+- GitHub Personal Access Token with appropriate scopes
