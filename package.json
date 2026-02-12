@@ -4,6 +4,9 @@
   "description": "OpenClaw skill to query and manage GitHub repositories from conversation",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "ts-node src/index.ts",
