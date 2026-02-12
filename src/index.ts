@@ -37,7 +37,7 @@ import {
 
 // Skill metadata
 export const skillName = 'github';
-export const skillVersion = '2.0.0';
+export const skillVersion = '2.0.1';
 export const skillDescription = 'Query and manage GitHub repositories';
 
 // Handler functions with proper signatures
