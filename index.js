@@ -235,6 +235,47 @@ async function createIssue(args, context) {
 }
 
 /**
+ * Create a new repository
+ */
+async function createRepo(args, context) {
+  const username = await getUsername(context);
+  const { name, description, private = false, auto_init = true } = args;
+  
+  if (!name) {
+    throw new Error('Repository name required');
+  }
+  
+  const url = `${GITHUB_API}/user/repos`;
+  
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: authHeaders(context),
+    body: JSON.stringify({
+      name,
+      description: description || '',
+      private,
+      auto_init
+    })
+  });
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Failed to create repo: ${error.message || response.status}`);
+  }
+  
+  const repo = await response.json();
+  
+  return {
+    name: repo.name,
+    full_name: repo.full_name,
+    description: repo.description,
+    url: repo.html_url,
+    private: repo.private,
+    clone_url: repo.clone_url
+  };
+}
+
+/**
  * Search repositories
  */
 async function searchRepos(args, context) {
@@ -342,6 +383,21 @@ const skill = {
         required: ['repo', 'title']
       },
       handler: createIssue
+    },
+    
+    create_repo: {
+      description: 'Create a new repository',
+      parameters: {
+        type: 'object',
+        properties: {
+          name: { type: 'string', description: 'Repository name' },
+          description: { type: 'string', description: 'Repository description' },
+          private: { type: 'boolean', description: 'Private repository', default: false },
+          auto_init: { type: 'boolean', description: 'Initialize with README', default: true }
+        },
+        required: ['name']
+      },
+      handler: createRepo
     },
     
     search_repos: {

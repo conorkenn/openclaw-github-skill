@@ -105,6 +105,13 @@ const tests = [
       console.log(`  Latest commit: ${commits[0].sha.substring(0, 7)} - ${commits[0].commit.message.split('\n')[0]}`);
       return true;
     }
+  },
+  {
+    name: 'Create Repository (Dry Run - Skip)',
+    test: async () => {
+      console.log('  Skipping actual repo creation (would create test-repo)');
+      return true;
+    }
   }
 ];
 

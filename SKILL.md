@@ -25,6 +25,7 @@ Query and manage GitHub repositories directly from your AI assistant.
 | `get_repo` | Get detailed info about a specific repo |
 | `check_ci_status` | Check CI/CD pipeline status |
 | `create_issue` | Create a new issue in a repo |
+| `create_repo` | Create a new repository |
 | `search_repos` | Search your repositories |
 | `get_recent_activity` | Get recent commits |
 
