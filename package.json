@@ -1,32 +1,34 @@
 {
   "name": "openclaw-github-skill",
-  "version": "1.0.4",
-  "description": "GitHub integration skill for OpenClaw — query repos, check CI status, create issues",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "OpenClaw skill to query and manage GitHub repositories from conversation",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "node test.js"
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "test": "node dist/index.js"
   },
   "keywords": [
     "openclaw",
-    "skill",
     "github",
     "git",
+    "repository",
     "automation"
   ],
+  "author": "Conor Kennedy",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/conorkennedy/openclaw-github-skill"
   },
-  "scripts": {
-    "test": "node index.js"
+  "bugs": {
+    "url": "https://github.com/conorkennedy/openclaw-github-skill/issues"
   },
-  "keywords": [
-    "openclaw",
-    "skill",
-    "github",
-    "git",
-    "automation"
-  ],
-  "author": "Conor Kennedy",
-  "license": "MIT"
+  "homepage": "https://github.com/conorkennedy/openclaw-github-skill",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.9.3"
+  }
 }

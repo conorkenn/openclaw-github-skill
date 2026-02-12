@@ -1,6 +1,32 @@
 # OpenClaw GitHub Skill
 
-A skill that lets your AI assistant query and manage GitHub repositories.
+A TypeScript-based skill that lets your AI assistant query and manage GitHub repositories.
+
+## Two Ways to Use
+
+### 1. OpenClaw Skill (Conversation)
+```
+You: List my Python repositories
+Bot: [lists your Python repositories]
+
+You: Create a PR from my-feature-branch to main
+Bot: [creates the PR and returns the link]
+```
+
+### 2. TypeScript Library
+```bash
+npm install openclaw-github-skill
+```
+
+```typescript
+import { listRepos, getRepo, createPullRequest } from 'openclaw-github-skill';
+
+const repos = await listRepos({ limit: 10 }, context);
+const repo = await getRepo({ owner: 'conorkenn', repo: 'ygo-cli' }, context);
+const pr = await createPullRequest({ owner, repo, title, head, base: 'main' }, context);
+```
+
+---
 
 ## Features
 
@@ -88,10 +114,28 @@ Bot: [shows matching repositories]
 
 ```
 openclaw-github-skill/
-├── SKILL.md       # Skill documentation for OpenClaw
-├── README.md      # This file
-├── index.js       # Skill implementation
-└── package.json   # NPM package metadata
+├── src/
+│   ├── types.ts      # TypeScript type definitions
+│   ├── api.ts        # Core API functions
+│   └── index.ts      # Skill wrapper
+├── dist/             # Compiled JavaScript (for OpenClaw)
+├── SKILL.md          # Skill documentation for OpenClaw
+├── README.md         # This file
+├── package.json      # NPM package metadata
+└── tsconfig.json    # TypeScript configuration
+```
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Build TypeScript
+npm run build
+
+# Test locally
+npm run test
 ```
 
 ## Commands Reference
