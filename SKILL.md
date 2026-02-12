@@ -1,7 +1,16 @@
 ---
 name: github
 description: Query and manage GitHub repositories - list repos, check CI status, create issues, search repos, and view recent activity.
-metadata: { "openclaw": { "emoji": "🐙" } }
+metadata:
+  openclaw:
+    emoji: "🐙"
+    requires:
+      env:
+        - GITHUB_TOKEN
+        - GITHUB_USERNAME
+      config:
+        - github.token
+        - github.username
 ---
 
 # GitHub Integration Skill
