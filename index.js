@@ -310,6 +310,47 @@ async function searchRepos(args, context) {
   };
 }
 
+/**
+ * Create a pull request
+ */
+async function createPullRequest(args, context) {
+  const username = await getUsername(context);
+  const { owner, repo, title, body, head, base = 'main' } = args;
+  
+  if (!owner || !repo || !title || !head) {
+    throw new Error('owner, repo, title, and head are required');
+  }
+  
+  const url = `${GITHUB_API}/repos/${owner}/${repo}/pulls`;
+  
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: authHeaders(context),
+    body: JSON.stringify({
+      title,
+      body: body || '',
+      head,
+      base
+    })
+  });
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(`Failed to create PR: ${error.message || response.status}`);
+  }
+  
+  const pr = await response.json();
+  
+  return {
+    number: pr.number,
+    title: pr.title,
+    url: pr.html_url,
+    state: pr.state,
+    head: pr.head.ref,
+    base: pr.base.ref
+  };
+}
+
 // Skill definition
 const skill = {
   name: 'github',
@@ -398,6 +439,23 @@ const skill = {
         required: ['name']
       },
       handler: createRepo
+    },
+    
+    create_pull_request: {
+      description: 'Create a pull request',
+      parameters: {
+        type: 'object',
+        properties: {
+          owner: { type: 'string', description: 'Repository owner' },
+          repo: { type: 'string', description: 'Repository name' },
+          title: { type: 'string', description: 'PR title' },
+          body: { type: 'string', description: 'PR description' },
+          head: { type: 'string', description: 'Source branch' },
+          base: { type: 'string', description: 'Target branch', default: 'main' }
+        },
+        required: ['owner', 'repo', 'title', 'head']
+      },
+      handler: createPullRequest
     },
     
     search_repos: {
