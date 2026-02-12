@@ -8,6 +8,7 @@ A skill that lets your AI assistant query and manage GitHub repositories.
 - 📊 **Get Repo Details** — Stars, forks, language, last updated
 - 🔄 **Check CI Status** — Monitor CI/CD pipelines
 - 📝 **Create Issues** — Open issues from conversation
+- 🔀 **Create PRs** — Create pull requests
 - 📁 **Create Repos** — Create new repositories
 - 🔍 **Search Repos** — Find repos by name/query
 - 📊 **Recent Activity** — View recent commits
@@ -73,6 +74,9 @@ Bot: [shows CI/CD status]
 You: Create an issue in my-project about the login bug
 Bot: [creates the issue and returns the link]
 
+You: Create a PR from my-feature-branch to main
+Bot: [creates the PR and returns the link]
+
 You: What's the recent activity on my-project?
 Bot: [shows recent commits]
 
@@ -98,6 +102,7 @@ openclaw-github-skill/
 | `get_repo` | Get detailed repo info (stars, forks, etc.) |
 | `check_ci_status` | CI/CD status |
 | `create_issue` | Create a new issue |
+| `create_pull_request` | Create a pull request |
 | `create_repo` | Create a new repository |
 | `search_repos` | Search your repositories |
 | `get_recent_activity` | View recent commits |
